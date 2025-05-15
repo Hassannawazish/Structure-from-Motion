@@ -211,7 +211,7 @@ Where:
 - \( x_{ij} \) are the 2D projections of the 3D points in the \( i \)-th camera view,
 - \( X_j \) are the 3D points.
 
-### 6. Colorization (Optional)
+### 6. Colorization
 
 To enhance the visualization of the 3D model, RGB values can be assigned to the 3D points by projecting them back to the original images and averaging the colors:
 
@@ -219,6 +219,7 @@ $$
 x_i = \pi(K[R_i|t_i]X)
 $$
 
+![GIF description](results/model.gif)
 ---
 
 ## Implementation
