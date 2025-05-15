@@ -63,15 +63,13 @@ This section describes the core mathematical steps behind the SIFT-based feature
 
 1. **SIFT Keypoint Detection**:  
    SIFT detects interest points that are invariant to scale, rotation, and partially invariant to affine transformations and illumination changes. The process starts by creating a Gaussian pyramid for each image to detect scale-invariant keypoints. The keypoints are then described using local feature descriptors.
+   $$ \text{Keypoint description} : \mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right] $$
 
-   \[
-   \text{Keypoint description} \: \mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right]
-   \]
    Where:
    - \(\mathcal{D}(x, y, \sigma)\) represents the descriptor for the point \((x, y)\) at scale \(\sigma\),
    - \(I(x, y)\) is the intensity at the point \((x, y)\).
 
-2. **Feature Matching (FLANN-Based Matcher)**:  
+3. **Feature Matching (FLANN-Based Matcher)**:  
    After detecting keypoints, the next step is to match these keypoints between two images. This is done using a FLANN-based matcher (Fast Library for Approximate Nearest Neighbors), which finds the nearest neighbors between the descriptors of the keypoints. FLANN is optimized to perform efficient matching across a large dataset of descriptors.
 
    The mathematical basis for the matching is defined as:
@@ -83,7 +81,7 @@ This section describes the core mathematical steps behind the SIFT-based feature
    Here:
    - \( \mathcal{D}(x_1, y_1) \) and \( \mathcal{D}(x_2, y_2) \) represent descriptors of keypoints in two images.
 
-3. **Ratio Test (Lowe's Method)**:  
+4. **Ratio Test (Lowe's Method)**:  
    Lowe’s ratio test is applied to filter out unreliable matches. The idea is that for each keypoint in the first image, the nearest and second nearest neighbors from the second image should have a ratio of distances that is below a threshold. This helps remove ambiguous matches where multiple keypoints may be close together.
 
    \[
@@ -93,7 +91,7 @@ This section describes the core mathematical steps behind the SIFT-based feature
    - \( d_1 \) is the distance to the nearest neighbor,
    - \( d_2 \) is the distance to the second nearest neighbor.
 
-4. **RANSAC and Fundamental Matrix**:  
+5. **RANSAC and Fundamental Matrix**:  
    RANSAC (Random Sample Consensus) is used to estimate the Fundamental Matrix \( F \) that relates corresponding points in two images. The fundamental matrix can be defined as:
 
    \[
