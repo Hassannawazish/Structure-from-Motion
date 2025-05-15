@@ -59,50 +59,69 @@ Feature detection methods, particularly SIFT (Scale-Invariant Feature Transform)
 
 Mathematically, we can describe the feature matching process as follows:
 
-1. **SIFT Keypoint Detection**:  
-   SIFT detects interest points that are invariant to scale, rotation, and partially invariant to affine transformations and illumination changes. The process starts by creating a Gaussian pyramid for each image to detect scale-invariant keypoints. The keypoints are then described using local feature descriptors.
+#### 1. SIFT Keypoint Detection:
 
-   $$
-   \mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right]
-   $$
+SIFT is used to detect stable keypoints that are invariant to scaling, rotation, and affine transformations. The process begins by creating a **Gaussian Pyramid** for each image, allowing the algorithm to detect keypoints at multiple scales. These keypoints are then described by local feature descriptors.
 
-   Where:
-   - \( \mathcal{D}(x, y, \sigma) \) represents the descriptor for the point \( (x, y) \) at scale \( \sigma \),
-   - \( I(x, y) \) is the intensity at the point \( (x, y) \).
+**Mathematical Formulation**:  
+The descriptor for each keypoint \( (x, y) \) at scale \( \sigma \) is given by:
 
-2. **Feature Matching (FLANN-Based Matcher)**:  
-   After detecting keypoints, the next step is to match these keypoints between two images. This is done using a FLANN-based matcher (Fast Library for Approximate Nearest Neighbors), which finds the nearest neighbors between the descriptors of the keypoints. FLANN is optimized to perform efficient matching across a large dataset of descriptors.
+$$
+\mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right]
+$$
 
-   The mathematical basis for the matching is defined as:
+Where:
+- \( \mathcal{D}(x, y, \sigma) \) represents the descriptor for the keypoint at location \( (x, y) \) at scale \( \sigma \),
+- \( I(x, y) \) is the intensity at the point \( (x, y) \).
 
-   $$
-   \text{distance} = \| \mathcal{D}(x_1, y_1) - \mathcal{D}(x_2, y_2) \|
-   $$
+#### 2. Feature Matching Using FLANN:
 
-   Here:
-   - \( \mathcal{D}(x_1, y_1) \) and \( \mathcal{D}(x_2, y_2) \) represent descriptors of keypoints in two images.
+After detecting the keypoints, descriptors are used to match keypoints between two images. A **FLANN-based Matcher** (Fast Library for Approximate Nearest Neighbors) is used to efficiently find the nearest neighbors of the descriptors.
 
-3. **Ratio Test (Lowe's Method)**:  
-   Lowe’s ratio test is applied to filter out unreliable matches. The idea is that for each keypoint in the first image, the nearest and second nearest neighbors from the second image should have a ratio of distances that is below a threshold. This helps remove ambiguous matches where multiple keypoints may be close together.
+**Mathematical Formulation**:  
+The matching distance between two descriptors is computed using the Euclidean distance:
 
-   $$
-   \frac{d_1}{d_2} < 0.7
-   $$
+$$
+\text{distance} = \| \mathcal{D}(x_1, y_1) - \mathcal{D}(x_2, y_2) \|
+$$
 
-   Where:
-   - \( d_1 \) is the distance to the nearest neighbor,
-   - \( d_2 \) is the distance to the second nearest neighbor.
+Where:
+- \( \mathcal{D}(x_1, y_1) \) and \( \mathcal{D}(x_2, y_2) \) are the descriptors of the matched keypoints in two images.
 
-4. **RANSAC and Fundamental Matrix**:  
-   RANSAC (Random Sample Consensus) is used to estimate the Fundamental Matrix \( F \) that relates corresponding points in two images. The fundamental matrix can be defined as:
+#### 3. Ratio Test (Lowe’s Method):
 
-   $$
-   x_j^T F x_i = 0
-   $$
+The **Ratio Test** (introduced by David Lowe) is used to filter out unreliable matches by comparing the distance between the best match and the second-best match. If the ratio between the distances is less than 0.7, the match is considered reliable.
 
-   Where \( x_i \) and \( x_j \) are corresponding points from two images. RANSAC is used to reject outlier matches by iterating over random samples of point correspondences and computing the fundamental matrix.
+**Mathematical Formulation**:  
+The ratio test is defined as:
 
-   The output of the RANSAC process is a binary mask indicating the inliers (matches that are consistent with the estimated fundamental matrix). The points that correspond to inliers are retained for further processing.
+$$
+\frac{d_1}{d_2} < 0.7
+$$
+
+Where:
+- \( d_1 \) is the distance to the nearest neighbor,
+- \( d_2 \) is the distance to the second nearest neighbor.
+
+#### 4. RANSAC and Fundamental Matrix:
+
+RANSAC (Random Sample Consensus) is used to estimate the **Fundamental Matrix** \( F \) that relates corresponding points between two images. The **Fundamental Matrix** can be defined as:
+
+$$
+x_j^T F x_i = 0
+$$
+
+Where:
+- \( x_i \) and \( x_j \) are the homogeneous coordinates of the corresponding points in the two images,
+- \( F \) is the **Fundamental Matrix**, which encodes the epipolar geometry between the two images.
+
+RANSAC is used to reject outlier matches by iterating over random samples and computing the Fundamental Matrix for each sample.
+
+#### 5. Drawing Matches:
+
+Once the inliers are identified using RANSAC, we visualize the matches by drawing lines between the corresponding keypoints in the two images.
+
+---
 
 ### 3. Initial Reconstruction
 
@@ -112,6 +131,11 @@ $$
 E = K^T F K
 $$
 
+Where:
+- \( E \) is the essential matrix,
+- \( F \) is the fundamental matrix,
+- \( K \) is the intrinsic camera matrix.
+
 ### 4. Incremental Camera Registration (PnP)
 
 The Pose-n-Point (PnP) problem is used to estimate the pose of each new image added to the reconstruction. The goal is to minimize the re-projection error:
@@ -120,15 +144,23 @@ $$
 \min_{R,t} \sum_i \| x_i - \pi(K[R|t]X_i) \|^2
 $$
 
-Where \(x_i\) are the 2D projections and \(X_i\) are the 3D points.
+Where:
+- \( R \) and \( t \) are the rotation and translation that describe the camera pose,
+- \( x_i \) are the 2D projections in the current image,
+- \( X_i \) are the 3D points,
+- \( \pi \) is the projection operator.
 
 ### 5. Triangulation & Bundle Adjustment
 
-Triangulation is used to compute the 3D locations of points from corresponding 2D image points. Bundle Adjustment (BA) refines camera poses and 3D points by minimizing the overall re-projection error:
+Triangulation is used to compute the 3D locations of points from corresponding 2D image points. Bundle Adjustment (BA) refines the camera poses and 3D points by minimizing the overall re-projection error:
 
 $$
 \min_{R_i, t_i, X_j} \sum_{i,j} \| x_{ij} - \pi(K[R_i X_j + t_i]) \|^2
 $$
+
+Where:
+- \( x_{ij} \) are the 2D projections of the 3D points in the \( i \)-th camera view,
+- \( X_j \) are the 3D points.
 
 ### 6. Colorization (Optional)
 
