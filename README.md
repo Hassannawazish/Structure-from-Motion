@@ -51,7 +51,7 @@ Where:
 - \(c_x, c_y\) are the coordinates of the principal point.  
 The sample image of the data is shown below.
 
-![Image description](Dataset/statue/DSC_0407.JPG)
+![Image description](src/Dataset/statue/DSC_0407.JPG)
 
 ### 2. Feature Detection & Matching
 
@@ -124,7 +124,7 @@ Once the inliers are identified using RANSAC, we visualize the matches by drawin
 
 The sample image is given below after feature matching. 
 
-![Image description](Dataset/sample.JPG)
+![Image description](results/sample.png)
 
 ---
 
