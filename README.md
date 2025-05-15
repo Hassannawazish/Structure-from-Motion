@@ -61,68 +61,48 @@ Feature detection method(SIFT) is used to identify key points across images. Mat
 
 This section describes the core mathematical steps behind the SIFT-based feature detector, descriptor, matching with Lowe’s ratio test, and RANSAC-based Fundamental matrix outlier rejection as implemented in:
 
+1. **SIFT Keypoint Detection**:  
+   SIFT detects interest points that are invariant to scale, rotation, and partially invariant to affine transformations and illumination changes. The process starts by creating a Gaussian pyramid for each image to detect scale-invariant keypoints. The keypoints are then described using local feature descriptors.
 
-1. **Keypoint Detection (SIFT)**  
-   - Build a Gaussian pyramid \(G(x,y,\sigma)\).  
-   - Compute Difference‐of‐Gaussians:  
-     ```
-     DoG(x, y, σ) = G(x, y, kσ) – G(x, y, σ)
-     ```  
-   - Detect local extrema in the 3×3×3 neighborhood across scale and space.
+   \[
+   \text{Keypoint description} \: \mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right]
+   \]
+   Where:
+   - \(\mathcal{D}(x, y, \sigma)\) represents the descriptor for the point \((x, y)\) at scale \(\sigma\),
+   - \(I(x, y)\) is the intensity at the point \((x, y)\).
 
-2. **Descriptor Extraction**  
-   - Around each keypoint, form a 16×16 window of gradients.  
-   - Divide into a 4×4 grid; in each cell, compute an 8-bin histogram of orientations.  
-   - Concatenate and normalize to produce a 128-dimensional descriptor.
+2. **Feature Matching (FLANN-Based Matcher)**:  
+   After detecting keypoints, the next step is to match these keypoints between two images. This is done using a FLANN-based matcher (Fast Library for Approximate Nearest Neighbors), which finds the nearest neighbors between the descriptors of the keypoints. FLANN is optimized to perform efficient matching across a large dataset of descriptors.
 
-3. **Descriptor Matching & Lowe’s Ratio Test**  
-   - Use a KD-tree (FLANN) to find, for each descriptor **d**, the two nearest neighbors **d₁**, **d₂** in the second image.  
-   - Retain the match only if:  
-     ```
-     ‖d – d₁‖ / ‖d – d₂‖ < 0.7
-     ```
+   The mathematical basis for the matching is defined as:
 
-4. **RANSAC + Fundamental Matrix Outlier Rejection**  
-   - Given candidate matches \((x₁ⁱ, x₂ⁱ)\), fit the Fundamental matrix **F** under RANSAC (threshold = 1 px, confidence = 0.99).  
-   - Enforce the epipolar constraint for inliers:  
-     ```
-     x₂ⁱᵀ · F · x₁ⁱ = 0
-     ```  
-   - Keep only those matches that satisfy this within the threshold.
+   \[
+   \text{distance} = \| \mathcal{D}(x_1, y_1) - \mathcal{D}(x_2, y_2) \|
+   \]
 
----
+   Here:
+   - \( \mathcal{D}(x_1, y_1) \) and \( \mathcal{D}(x_2, y_2) \) represent descriptors of keypoints in two images.
 
-### Key Mathematical Concepts
+3. **Ratio Test (Lowe's Method)**:  
+   Lowe’s ratio test is applied to filter out unreliable matches. The idea is that for each keypoint in the first image, the nearest and second nearest neighbors from the second image should have a ratio of distances that is below a threshold. This helps remove ambiguous matches where multiple keypoints may be close together.
 
-- **Difference‐of‐Gaussians (DoG):**  
-  \[
-    \mathrm{DoG}(x,y,\sigma) = G(x,y,k\sigma) - G(x,y,\sigma)
-  \]  
-  Locates scale‐space extrema for invariant keypoint detection.
+   \[
+   \frac{d_1}{d_2} < 0.7
+   \]
+   Where:
+   - \( d_1 \) is the distance to the nearest neighbor,
+   - \( d_2 \) is the distance to the second nearest neighbor.
 
-- **Descriptor Distance Ratio:**  
-  \[
-    \frac{\|d - d₁\|}{\|d - d₂\|} < 0.7
-  \]  
-  Filters out ambiguous matches by comparing nearest‐neighbor distances.
+4. **RANSAC and Fundamental Matrix**:  
+   RANSAC (Random Sample Consensus) is used to estimate the Fundamental Matrix \( F \) that relates corresponding points in two images. The fundamental matrix can be defined as:
 
-- **Epipolar Constraint & Fundamental Matrix:**  
-  \[
-    x₂ᵀ F x₁ = 0
-  \]  
-  Governs the relation between corresponding points in two uncalibrated views.
+   \[
+   x_j^T F x_i = 0
+   \]
 
-- **RANSAC:**  
-  Robustly estimates **F** by repeatedly sampling minimal subsets (8 points), solving for **F**, and selecting the model with the most inliers.
+   Where \( x_i \) and \( x_j \) are corresponding points from two images. RANSAC is used to reject outlier matches by iterating over random samples of point correspondences and computing the fundamental matrix.
 
----
-
-### References
-
-- D. G. Lowe, “Distinctive Image Features from Scale-Invariant Keypoints,” *IJCV*, 2004.  
-- R. Hartley & A. Zisserman, *Multiple View Geometry in Computer Vision*, Cambridge University Press, 2004.  
-- M. A. Fischler & R. C. Bolles, “RANSAC: A Paradigm for Model Fitting,” *CACM*, 1981.  
-- OpenCV Docs: https://docs.opencv.org  
+   The output of the RANSAC process is a binary mask indicating the inliers (matches that are consistent with the estimated fundamental matrix). The points that correspond to inliers are retained for further processing.
 
 
 ### 3. Initial Reconstruction
