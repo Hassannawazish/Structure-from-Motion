@@ -1,0 +1,2 @@
+class StructurefromMotion:
+    pass
