@@ -62,6 +62,7 @@ Mathematically, we can describe the feature matching process as follows:
 #### 1. SIFT Keypoint Detection:
 
 SIFT is used to detect stable keypoints that are invariant to scaling, rotation, and affine transformations. The process begins by creating a **Gaussian Pyramid** for each image, allowing the algorithm to detect keypoints at multiple scales. These keypoints are then described by local feature descriptors.
+                  cv2.SIFT_create(nfeatures)
 
 **Mathematical Formulation**:  
 The descriptor for each keypoint \( (x, y) \) at scale \( \sigma \) is given by:
