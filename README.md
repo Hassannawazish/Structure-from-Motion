@@ -53,19 +53,7 @@ The sample Image of the Data is shown below.
 
 ### 2. Feature Detection & Matching
 
-Feature detection method(SIFT) is used to identify key points across images. Matching these features between images helps establish correspondences. 
-
-
-## Feature Detection & Matching
-
-### Concept Overview  
-Feature detection and matching establish reliable 2D–2D correspondences between image pairs. These correspondences are the foundation for estimating relative camera poses (PnP, essential matrix) and for triangulating 3D scene points.
-
-## Feature Detection & Matching
-
-Establishes robust 2D–2D correspondences between a pair of images. These matches drive pose estimation and 3D triangulation.
-
-### Pipeline Steps
+Feature detection method(SIFT) is used to identify key points across images. Matching these features between images helps establish correspondences. Feature detection and matching establish reliable 2D–2D correspondences between image pairs. These correspondences are the foundation for estimating relative camera poses (PnP, essential matrix) and for triangulating 3D scene points.
 
 1. **Keypoint Detection (SIFT)**  
    - Build a Gaussian pyramid \(G(x,y,\sigma)\).  
