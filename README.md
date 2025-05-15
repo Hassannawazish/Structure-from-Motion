@@ -248,15 +248,30 @@ The implementation follows these steps:
 
 ---
 
-## How to run ?
-You must have installed python >= 3.11.10
+## Requirements
 
+- Python = > 3.10.11 
 
+## Setup Instructions
+
+To set up and run the project, follow these commands:
+
+```bash
+# Clone the repository
 git clone https://github.com/Hassannawazish/Structure-from-Motion.git
+
+# Navigate into the project directory
 cd Structure-from-Motion
+
+# Install the required dependencies
 pip install -r requirements.txt
+
+# Navigate to the 'src' directory
 cd src
+
+# Run the project
 python main.py
+
 
 ---
 
