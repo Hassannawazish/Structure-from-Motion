@@ -248,15 +248,15 @@ The implementation follows these steps:
 
 ---
 
-## Mathematics
+## How to run ?
+You must have installed python >= 3.11.10
 
-The following mathematical formulations were used in the implementation:
 
-- Camera Calibration Matrix \( K \)
-- Fundamental Matrix \( F \)
-- Essential Matrix \( E \)
-- PnP Pose Estimation
-- Bundle Adjustment Minimization Formula
+git clone https://github.com/Hassannawazish/Structure-from-Motion.git
+cd Structure-from-Motion
+pip install -r requirements.txt
+cd src
+python main.py
 
 ---
 
@@ -265,3 +265,5 @@ The following mathematical formulations were used in the implementation:
 1. Hartley, R., & Zisserman, A. (2004). *Multiple View Geometry in Computer Vision*. Cambridge University Press.
 2. OpenCV Documentation: [https://docs.opencv.org/](https://docs.opencv.org/)
 3. Middlebury 3D Reconstruction Datasets: [https://vision.middlebury.edu/mview/data/](https://vision.middlebury.edu/mview/data/)
+4. Lund University Datasets : [https://www.maths.lth.se/matematiklth/personal/calle/dataset/dataset.html)
+
