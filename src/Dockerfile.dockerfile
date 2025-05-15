@@ -1,15 +1,15 @@
 # Use Python base image
 FROM python:3.10-slim
 
-# Set work directory in container
+# Set working directory
 WORKDIR /app
 
-# Copy requirements and install dependencies
-COPY Requirements ./Requirements
-RUN pip install --upgrade pip && pip install -r Requirements
+# Copy actual file (requirement.txt)
+COPY requirement.txt ./requirement.txt
+RUN pip install --upgrade pip && pip install -r requirement.txt
 
-# Copy entire project
+# Copy everything else
 COPY . .
 
-# Set the default command to run your script
+# Set the default command
 CMD ["python", "src/main.py"]

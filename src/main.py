@@ -33,6 +33,6 @@ StructurefromMotion.save_to_ply               = save_to_ply
 StructurefromMotion.__call__                  = sfm_call
 
 if __name__ == '__main__':
-    sfm = StructurefromMotion("../Dataset/statue")
+    sfm = StructurefromMotion("Dataset/statue")
     sfm()
     sfm(bundle_adjustment_enabled=True)
