@@ -239,14 +239,12 @@ The implementation follows these steps:
 
 ### 3D Point Cloud
 
-[Insert 3D Point Cloud Image Here]
-
 - Point Cloud Visualizations
 - Camera Trajectories
 
 ### Reprojection Error
 
-[Insert Reprojection Error Graph Here]
+![Image description](results/image.png)
 
 ---
 
