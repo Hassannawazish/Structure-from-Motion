@@ -48,6 +48,8 @@ $$
 Where:
 - \(f\) is the focal length,
 - \(c_x, c_y\) are the coordinates of the principal point.
+The sample Image of the Data is shown below.
+![Image description](data/Dataset/statue/DSC_0407.JPG)
 
 ### 2. Feature Detection & Matching
 
