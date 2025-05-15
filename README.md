@@ -53,13 +53,82 @@ The sample Image of the Data is shown below.
 
 ### 2. Feature Detection & Matching
 
-Feature detection methods like SIFT and ORB are used to identify key points across images. Matching these features between images helps establish correspondences. The mathematical formulation of the Fundamental Matrix \(F\) is:
+Feature detection method(SIFT) is used to identify key points across images. Matching these features between images helps establish correspondences. 
 
-\[
-x_j^T F x_i = 0
-\]
 
-Where \(x_i\) and \(x_j\) are corresponding points from two different images.
+## Feature Detection & Matching
+
+### Concept Overview  
+Feature detection and matching establish reliable 2D–2D correspondences between image pairs. These correspondences are the foundation for estimating relative camera poses (PnP, essential matrix) and for triangulating 3D scene points.
+
+---
+
+### Pipeline Steps
+
+1. **Keypoint Detection (SIFT)**  
+   - Build a scale-space pyramid by convolving the image with Gaussians at multiple scales.  
+   - Compute Difference-of-Gaussians (DoG) between adjacent scales.  
+   - Detect keypoints as local extrema in the 3×3×3 neighborhood across space and scale.  
+
+2. **Descriptor Extraction**  
+   - Around each keypoint, sample image gradients in a 16×16 pixel window.  
+   - Partition into a 4×4 grid of cells; in each cell, form an 8-bin orientation histogram of gradient directions.  
+   - Concatenate histograms into a 128-dimension vector and normalize to unit length.
+
+3. **Descriptor Matching & Lowe’s Ratio Test**  
+   - Use a KD-tree (FLANN) to find the two nearest descriptors \(d_1, d_2\) in the second image for each descriptor \(d\) in the first.  
+   - Retain the match \(d \leftrightarrow d_1\) only if  
+     \[
+       \frac{\lVert d - d_1\rVert}{\lVert d - d_2\rVert} < 0.7,
+     \]  
+     filtering out ambiguous or repeated patterns.
+
+4. **RANSAC + Fundamental Matrix Outlier Rejection**  
+   - Estimate the Fundamental matrix \(F\) under RANSAC from matched points \(\{\mathbf{x}_1^i,\mathbf{x}_2^i\}\).  
+   - The epipolar constraint  
+     \[
+       \mathbf{x}_2^{i\top}\,F\,\mathbf{x}_1^i = 0
+     \]  
+     must hold for inliers.  
+   - Iteratively sample minimal subsets (8 points), solve for \(F\) (eight-point algorithm), and count inliers with  
+     \(\lvert \mathbf{x}_2^\top F\,\mathbf{x}_1\rvert < 1\) px.  
+   - Final inlier set defines the filtered correspondences.
+
+---
+
+### Mathematical Details
+
+#### 1. DoG Keypoint Localization  
+- **Gaussian pyramid**:  
+  \(\displaystyle G(x,y,\sigma) = I * \mathcal{N}(0,\sigma^2)\)  
+- **DoG image**:  
+  \(\displaystyle D(x,y,\sigma) = G(x,y,k\sigma) - G(x,y,\sigma)\)  
+- **Extrema**:  
+  A sample is a keypoint if it is a local maximum or minimum in its 3×3×3 neighborhood in \(D\).
+
+#### 2. SIFT Descriptor Formation  
+- Compute gradient magnitude \(m(x,y)\) and orientation \(\theta(x,y)\).  
+- In each 4×4 cell, form histogram  
+  \[
+    h_j = \sum_{\text{cell}} m(x,y)\,\delta\bigl(\theta(x,y)\in\text{bin }j\bigr),\quad j=1\ldots8.
+  \]  
+- Descriptor vector \(\mathbf{d}\in\mathbb{R}^{128}\) is \([h_1,\dots,h_{128}]^\top\), then normalized.
+
+#### 3. Lowe’s Ratio Test  
+- Given distances \(r_1 = \lVert d - d_1\rVert\) and \(r_2 = \lVert d - d_2\rVert\), accept match if  
+  \(\,r_1 / r_2 < 0.7.\)
+
+#### 4. Epipolar Geometry & Fundamental Matrix  
+- For corresponding homogeneous points \(\mathbf{x}_1, \mathbf{x}_2\):  
+  \(\displaystyle \mathbf{x}_2^\top F\,\mathbf{x}_1 = 0.\)  
+- \(F\) is estimated (eight-point algorithm) under the rank-2 constraint.
+
+#### 5. RANSAC for Robust Estimation  
+1. Randomly sample 8 matches.  
+2. Estimate \(F\) and enforce \(\mathrm{rank}(F)=2\).  
+3. Count inliers satisfying \(\lvert \mathbf{x}_2^\top F\,\mathbf{x}_1\rvert < 1\).  
+4. Repeat and choose the model with the largest inlier set.
+5. 
 
 ### 3. Initial Reconstruction
 
