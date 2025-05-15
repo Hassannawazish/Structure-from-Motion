@@ -34,7 +34,7 @@ The goal of this project is to reconstruct 3D models from 2D image sequences by 
 
 ### 1. Dataset Description
 
-Intrinsic parameters of the camera are given, which include the focal length and principal point. 
+The dataset used in this project is taken from  https://www.maths.lth.se/matematiklth/personal/calle/dataset/dataset.html named as Gustav II Adolf. Images and Intrinsic parameters of the camera are given, which include the focal length and principal point. 
 The intrinsic matrix **K** is defined as:
 
 $$
