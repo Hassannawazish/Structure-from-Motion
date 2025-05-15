@@ -141,6 +141,50 @@ Where:
 - \( F \) is the fundamental matrix,
 - \( K \) is the intrinsic camera matrix.
 
+**Pose Recovery (Rotation and Translation)**:
+   The pose (rotation \( R \) and translation \( t \)) between the two camera views can be recovered from the Essential Matrix using the camera's intrinsic matrix \( K \). The pose is given by:
+
+   $$
+   [R|t] = \text{recoverPose}(E)
+   $$
+
+   Where:
+   - \( R \) is the 3x3 rotation matrix,
+   - \( t \) is the 3x1 translation vector.
+
+**Cheirality Check**:
+   Cheirality refers to ensuring that points are in front of both cameras, meaning they have positive depth. This check is essential for valid 3D reconstruction. The valid points are those that satisfy the condition:
+
+   $$
+   z > 0
+   $$
+
+   Where \( z \) represents the depth (the third component of the 3D point in homogeneous coordinates).
+
+**Triangulation**:
+   Once the pose is recovered and cheirality is checked, we use triangulation to compute the 3D locations of points from corresponding 2D image points. The mathematical formulation for triangulation, given the two camera projection matrices \( P_1 \) and \( P_2 \) and the 2D points \( x_1 \) and \( x_2 \) in the two images, is:
+
+   $$
+   X = \text{Triangulate}(P_1, P_2, x_1, x_2)
+   $$
+
+   Where:
+   - \( X \) is the 3D point in homogeneous coordinates,
+   - \( P_1 \) and \( P_2 \) are the 3x4 projection matrices for the two camera views,
+   - \( x_1 \) and \( x_2 \) are the 2D corresponding points in the two images.
+
+**Normalization of Homogeneous Coordinates**:
+   After triangulating the 3D points, they are typically returned in **homogeneous coordinates**. To convert them to **Euclidean coordinates**, we normalize them by dividing by the last coordinate:
+
+   $$
+   X_{\text{Euclidean}} = \frac{X_{\text{Homogeneous}}}{X_{\text{Homogeneous}}[3]}
+   $$
+
+   Where:
+   - \( X_{\text{Euclidean}} \) is the 3D point in Euclidean coordinates,
+   - \( X_{\text{Homogeneous}} \) is the 3D point in homogeneous coordinates.
+
+
 ### 4. Incremental Camera Registration (PnP)
 
 The Pose-n-Point (PnP) problem is used to estimate the pose of each new image added to the reconstruction. The goal is to minimize the re-projection error:
