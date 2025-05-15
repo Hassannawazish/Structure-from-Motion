@@ -105,7 +105,7 @@ Where:
 
 #### 4. RANSAC and Fundamental Matrix:
 
-RANSAC (Random Sample Consensus) is used to estimate the **Fundamental Matrix** \( F \) that relates corresponding points between two images. The **Fundamental Matrix** can be defined as:    **cv2.findFundamentalMat(pts0,pts1,method,ransacReprojThreshold,confidence=)**
+RANSAC (Random Sample Consensus) is used to estimate the **Fundamental Matrix** \( F \) that relates corresponding points between two images. The **Fundamental Matrix** can be defined as:    **cv2.findFundamentalMat(pts0,pts1,method = cv2.FM_RANSAC,ransacReprojThreshold,confidence)**
 
 $$
 x_j^T F x_i = 0
@@ -120,7 +120,9 @@ RANSAC is used to reject outlier matches by iterating over random samples and co
 #### 5. Drawing Matches:
 
 Once the inliers are identified using RANSAC, we visualize the matches by drawing lines between the corresponding keypoints in the two images.
-
+**  cv2.drawMatches **
+The sample image is given below after feature matching.
+![Image description](Dataset/sample.JPG)
 ---
 
 ### 3. Initial Reconstruction
