@@ -3,6 +3,7 @@ from image_loader_init import init_ImageLoader
 from downscale_image import downscale_image
 from downscale_instrinsics import downscale_instrinsics
 
+
 # patch ImageLoader
 ImageLoader.__init__              = init_ImageLoader
 ImageLoader.downscale_image       = downscale_image
@@ -19,6 +20,7 @@ from optimize_reproj_error import optimize_reproj_error
 from compute_bundle_adjustment import compute_bundle_adjustment
 from save_to_ply import save_to_ply
 from sfm_call import sfm_call
+from visualize_point_cloud import visualize_point_cloud
 
 # patch StructurefromMotion
 StructurefromMotion.__init__                  = init_StructurefromMotion
@@ -36,3 +38,6 @@ if __name__ == '__main__':
     sfm = StructurefromMotion("Dataset/statue")
     sfm()
     sfm(bundle_adjustment_enabled=True)
+
+    ply_path = r"Results with Bundle Adjustment\statue.ply"
+    visualize_point_cloud(ply_path)
