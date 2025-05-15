@@ -143,7 +143,7 @@ Where:
 
 **Pose Recovery (Rotation and Translation)**:
    The pose (rotation \( R \) and translation \( t \)) between the two camera views can be recovered from the Essential Matrix using the camera's intrinsic matrix \( K \). 
-   ** cv2.recoverPose(E, pts1, pts2, K) **
+   **cv2.recoverPose(E, pts1, pts2, K)**
    The pose is given by:
 
    $$
@@ -165,7 +165,7 @@ Where:
 
 **Triangulation**:
    Once the pose is recovered and cheirality is checked, we use triangulation to compute the 3D locations of points from corresponding 2D image points. 
-   ** cv2.triangulatePoints(P1, P2, pts1_arr, pts2_arr) **
+   **cv2.triangulatePoints(P1, P2, pts1_arr, pts2_arr)**
    The mathematical formulation for triangulation, given the two camera projection matrices \( P_1 \) and \( P_2 \) and the 2D points \( x_1 \) and \( x_2 \) in the two images, is:
 
    $$
