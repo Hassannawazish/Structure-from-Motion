@@ -202,8 +202,6 @@ Where:
 - \( x_i \) are the 2D projections in the current image,
 - \( X_i \) are the 3D points,
 - \( \pi \) is the projection operator.
-
-
 1. **`cv2.solvePnPRansac()` (Solving the PnP Problem)**:
    The Perspective-n-Point (PnP) problem estimates the camera pose (rotation and translation) given a set of 3D object points and their corresponding 2D projections in an image. The solution is obtained by minimizing the **reprojection error**. The reprojection error is given by:
 
@@ -239,9 +237,6 @@ Where:
    $$
 
    This ensures that only points with positive depth (i.e., in front of both cameras) are used in the final triangulation.
-
-
-
 ### 5. Triangulation & Bundle Adjustment
 
 Triangulation is used to compute the 3D locations of points from corresponding 2D image points. Bundle Adjustment (BA) refines the camera poses and 3D points by minimizing the overall re-projection error:
