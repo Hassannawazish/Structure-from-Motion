@@ -245,7 +245,8 @@ Where:
 - \( x_{ij} \) are the 2D projections of the 3D points in the \( i \)-th camera view,
 - \( X_j \) are the 3D points.
 
-### 6. Colorization (Optional)
+For bundle Adjustment least_squares(self.optimize_reproj_error, opt_variables, gtol=r_error) by scipy is used.
+### 6. Colorization
 
 To enhance the visualization of the 3D model, RGB values can be assigned to the 3D points by projecting them back to the original images and averaging the colors:
 
