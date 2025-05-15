@@ -61,8 +61,7 @@ Mathematically, we can describe the feature matching process as follows:
 
 #### 1. SIFT Keypoint Detection:
 
-SIFT is used to detect stable keypoints that are invariant to scaling, rotation, and affine transformations. The process begins by creating a **Gaussian Pyramid** for each image, allowing the algorithm to detect keypoints at multiple scales. These keypoints are then described by local feature descriptors.
-                  cv2.SIFT_create(nfeatures)
+SIFT is used to detect stable keypoints that are invariant to scaling, rotation, and affine transformations. The process begins by creating a **Gaussian Pyramid** for each image, allowing the algorithm to detect keypoints at multiple scales. These keypoints are then described by local feature descriptors.          **cv2.SIFT_create(nfeatures)**
 
 **Mathematical Formulation**:  
 The descriptor for each keypoint \( (x, y) \) at scale \( \sigma \) is given by:
@@ -77,7 +76,7 @@ Where:
 
 #### 2. Feature Matching Using FLANN:
 
-After detecting the keypoints, descriptors are used to match keypoints between two images. A **FLANN-based Matcher** (Fast Library for Approximate Nearest Neighbors) is used to efficiently find the nearest neighbors of the descriptors.
+After detecting the keypoints, descriptors are used to match keypoints between two images. A **FLANN-based Matcher** (Fast Library for Approximate Nearest Neighbors) is used to efficiently find the nearest neighbors of the descriptors.  **cv2.FlannBasedMatcher()**
 
 **Mathematical Formulation**:  
 The matching distance between two descriptors is computed using the Euclidean distance:
@@ -106,7 +105,7 @@ Where:
 
 #### 4. RANSAC and Fundamental Matrix:
 
-RANSAC (Random Sample Consensus) is used to estimate the **Fundamental Matrix** \( F \) that relates corresponding points between two images. The **Fundamental Matrix** can be defined as:
+RANSAC (Random Sample Consensus) is used to estimate the **Fundamental Matrix** \( F \) that relates corresponding points between two images. The **Fundamental Matrix** can be defined as:    **cv2.findFundamentalMat(pts0,pts1,method,ransacReprojThreshold,confidence=)**
 
 $$
 x_j^T F x_i = 0
