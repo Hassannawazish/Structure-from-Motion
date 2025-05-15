@@ -124,7 +124,7 @@ Once the inliers are identified using RANSAC, we visualize the matches by drawin
 
 The sample image is given below after feature matching. 
 
-![Image description](Dataset/sample.JPG)
+![Image description](Dataset/sample.png)
 
 ---
 
