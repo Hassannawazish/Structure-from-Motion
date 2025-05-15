@@ -121,8 +121,11 @@ RANSAC is used to reject outlier matches by iterating over random samples and co
 
 Once the inliers are identified using RANSAC, we visualize the matches by drawing lines between the corresponding keypoints in the two images.
 **  cv2.drawMatches **
-The sample image is given below after feature matching.
+
+The sample image is given below after feature matching. 
+
 ![Image description](Dataset/sample.JPG)
+
 ---
 
 ### 3. Initial Reconstruction
