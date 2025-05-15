@@ -63,9 +63,14 @@ This section describes the core mathematical steps behind the SIFT-based feature
 
 1. **SIFT Keypoint Detection**:  
    SIFT detects interest points that are invariant to scale, rotation, and partially invariant to affine transformations and illumination changes. The process starts by creating a Gaussian pyramid for each image to detect scale-invariant keypoints. The keypoints are then described using local feature descriptors.
-$ \mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right] $
+   
+   $$
+   \mathcal{D}(x, y, \sigma) = \left[ I(x, y), I(x + \Delta x, y + \Delta y) \dots \right]
+   $$
 
-
+   Where:
+   - \( \mathcal{D}(x, y, \sigma) \) represents the descriptor for the point \( (x, y) \) at scale \( \sigma \),
+   - \( I(x, y) \) is the intensity at the point \( (x, y) \).
    Where:
    - \(\mathcal{D}(x, y, \sigma)\) represents the descriptor for the point \((x, y)\) at scale \(\sigma\),
    - \(I(x, y)\) is the intensity at the point \((x, y)\).
