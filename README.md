@@ -203,6 +203,45 @@ Where:
 - \( X_i \) are the 3D points,
 - \( \pi \) is the projection operator.
 
+
+1. **`cv2.solvePnPRansac()` (Solving the PnP Problem)**:
+   The Perspective-n-Point (PnP) problem estimates the camera pose (rotation and translation) given a set of 3D object points and their corresponding 2D projections in an image. The solution is obtained by minimizing the **reprojection error**. The reprojection error is given by:
+
+   $$
+   \sum_{i} \| x_i - \pi(K [R|t] X_i) \|^2
+   $$
+
+   Where:
+   - \( x_i \) are the 2D image points in the image plane,
+   - \( X_i \) are the corresponding 3D world points,
+   - \( K \) is the camera intrinsic matrix,
+   - \( [R|t] \) represents the camera's rotation and translation, which are the unknowns we want to solve for,
+   - \( \pi \) is the projection function mapping 3D points to 2D image coordinates.
+
+   The solution to this problem is obtained using **RANSAC** to handle outliers. RANSAC is an iterative method that estimates the camera pose while discarding outlier matches.
+
+2. **`cv2.Rodrigues()` (Rotation Vector to Rotation Matrix)**:
+   Once the camera pose is estimated, the rotation is typically represented as a rotation vector. The function `cv2.Rodrigues()` converts this **rotation vector** to a **rotation matrix**. The rotation matrix \( R \) can be derived from the Rodrigues' rotation formula as follows:
+
+   $$
+   R = \text{Rodrigues}(\mathbf{r})
+   $$
+
+   Where:
+   - \( \mathbf{r} \) is the 3x1 rotation vector,
+   - \( R \) is the 3x3 rotation matrix that represents the rotation of the camera relative to the object in the world.
+
+3. **Inlier Mask for RANSAC**:
+   The function `cv2.solvePnPRansac()` returns an **inlier mask** that indicates which points were considered inliers by the RANSAC algorithm. The inlier mask is used to filter the 2D and 3D points that contribute to the final camera pose solution. The condition for valid inliers is:
+
+   $$
+   \text{inlier} = \text{True} \quad \text{if point is valid (depth > 0)}
+   $$
+
+   This ensures that only points with positive depth (i.e., in front of both cameras) are used in the final triangulation.
+
+
+
 ### 5. Triangulation & Bundle Adjustment
 
 Triangulation is used to compute the 3D locations of points from corresponding 2D image points. Bundle Adjustment (BA) refines the camera poses and 3D points by minimizing the overall re-projection error:
