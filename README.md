@@ -37,13 +37,13 @@ The goal of this project is to reconstruct 3D models from 2D image sequences by 
 Intrinsic parameters of the camera are given, which include the focal length and principal point. 
 The intrinsic matrix **K** is defined as:
 
-\[
+$$
 K = \begin{bmatrix}
 f & 0 & c_x \\
 0 & f & c_y \\
 0 & 0 & 1
 \end{bmatrix}
-\]
+$$
 
 Where:
 - \(f\) is the focal length,
