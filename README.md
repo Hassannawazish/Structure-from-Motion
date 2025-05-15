@@ -194,7 +194,7 @@ Where:
 The Pose-n-Point (PnP) problem is used to estimate the pose of each new image added to the reconstruction. The goal is to minimize the re-projection error:
 
 $$
-\min_{R,t} \sum_i \| x_i - \pi(K[R|t]X_i) \|^2
+min_{R,t} \sum_i \| x_i - \pi(K[R|t]X_i) \|^2
 $$
 
 Where:
@@ -206,7 +206,7 @@ Where:
    The Perspective-n-Point (PnP) problem estimates the camera pose (rotation and translation) given a set of 3D object points and their corresponding 2D projections in an image. The solution is obtained by minimizing the **reprojection error**. The reprojection error is given by:
 
    $$
-   \sum_{i} \| x_i - \pi(K [R|t] X_i) \|^2
+   sum_{i} \| x_i - \pi(K [R|t] X_i) \|^2
    $$
 
    Where:
