@@ -22,15 +22,16 @@ def save_to_ply(self, path, point_cloud, colors=None, bundle_adjustment_enabled=
     # validate input arrays & scale if needed
     point_cloud = np.asarray(point_cloud).reshape(-1,3) * scaling_factor
 
-    if colors is not None:
+    # Set all colors to red (255 for red, 0 for green and blue)
+    if colors is None:
+        colors = np.full_like(point_cloud, fill_value=[255, 0, 0], dtype=np.uint8)
+    else:
         colors = np.asarray(colors).reshape(-1,3)
         colors = np.clip(colors, 0, 255).astype(np.uint8)
         if colors.shape[0] != point_cloud.shape[0]:
             n = min(colors.shape[0], point_cloud.shape[0])
             colors = colors[:n]
             point_cloud = point_cloud[:n]
-    else:
-        colors = np.full_like(point_cloud, fill_value=105, dtype=np.uint8)
 
     # Normalize the point cloud 
     mean = np.mean(point_cloud, axis=0)
