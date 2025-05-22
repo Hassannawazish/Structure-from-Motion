@@ -218,7 +218,7 @@ To enhance the visualization of the 3D model, RGB values can be assigned to the 
 $$
 x_i = \pi(K[R_i|t_i]X)
 $$
-
+![Image description](results/color_img.png)
 ![GIF description](results/model.gif)
 ---
 
