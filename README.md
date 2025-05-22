@@ -56,7 +56,7 @@ The sample image of the data is shown below.
 ### 2. Feature Detection & Matching
 
 Feature detection methods, particularly SIFT (Scale-Invariant Feature Transform), are used to identify keypoints across multiple images. These keypoints are then matched between the images to establish correspondences. Matching is typically done using a nearest neighbor search with a ratio test to eliminate ambiguous matches.
-
+![Image description](results/detection.png)
 Mathematically, we can describe the feature matching process as follows:
 
 #### 1. SIFT Keypoint Detection:
