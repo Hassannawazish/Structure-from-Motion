@@ -275,7 +275,9 @@ python main.py
 
 ---
 
-## References
+
+
+# References
 
 1. Hartley, R., & Zisserman, A. (2004). *Multiple View Geometry in Computer Vision*. Cambridge University Press.
 2. OpenCV Documentation: [https://docs.opencv.org/](https://docs.opencv.org/)
